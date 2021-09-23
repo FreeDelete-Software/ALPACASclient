@@ -1,3 +1,12 @@
+# This code was copied from the websocket_chat demo code provided by Godot
+# under its MIT license terms. See godot.LICENSE.txt for the full license text.
+# Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+# Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+
+# Modifications for the ALPACASclient project are BSD 3-Clause:
+# Copyright (c) 2021, Michael J. Freidel
+# See the LICENSE file for the full license text.
+
 extends Control
 
 onready var _client = $Client
