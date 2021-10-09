@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://client/client_ui.gd" type="Script" id=1]
 [ext_resource path="res://client/client.gd" type="Script" id=2]
+[ext_resource path="res://client/evennia.gd" type="Script" id=3]
 
 [node name="Client" type="Control"]
 anchor_right = 1.0
@@ -14,6 +15,9 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 anchor_right = 1.0
@@ -27,7 +31,7 @@ margin_bottom = 24.0
 margin_right = 956.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
-text = "ws://localhost:8000/test/"
+text = "Enter IP address"
 placeholder_text = "ws://my.server/path/"
 
 [node name="Connect" type="Button" parent="Panel/VBoxContainer/Connect"]
@@ -50,7 +54,7 @@ margin_bottom = 24.0
 margin_left = 33.0
 margin_right = 159.0
 margin_bottom = 24.0
-pressed = true
+toggle_mode = false
 text = "Multiplayer API"
 
 [node name="Destination" type="OptionButton" parent="Panel/VBoxContainer/Settings"]
@@ -83,6 +87,9 @@ size_flags_vertical = 3
 
 [node name="Client" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="Evennia" type="Node" parent="."]
+script = ExtResource( 3 )
 
 [connection signal="toggled" from="Panel/VBoxContainer/Connect/Connect" to="." method="_on_Connect_toggled"]
 [connection signal="item_selected" from="Panel/VBoxContainer/Settings/Mode" to="." method="_on_Mode_item_selected"]

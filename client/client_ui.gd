@@ -17,12 +17,22 @@ onready var _multiplayer = $Panel/VBoxContainer/Settings/Multiplayer
 onready var _write_mode = $Panel/VBoxContainer/Settings/Mode
 onready var _destination = $Panel/VBoxContainer/Settings/Destination
 
+# ALPACAS
+# Add var for Evennia connection node/script.
+onready var _evennia = $Evennia
+# ALPACAS
+
 func _ready():
 	_write_mode.clear()
 	_write_mode.add_item("BINARY")
 	_write_mode.set_item_metadata(0, WebSocketPeer.WRITE_MODE_BINARY)
 	_write_mode.add_item("TEXT")
 	_write_mode.set_item_metadata(1, WebSocketPeer.WRITE_MODE_TEXT)
+
+	# ALPACAS -- Add Evennia option to Mode menu
+	_write_mode.add_item("Evennia")
+	_write_mode.set_item_metadata(2, WebSocketPeer.WRITE_MODE_TEXT)
+	# ALPACAS
 
 	_destination.add_item("Broadcast")
 	_destination.set_item_metadata(0, 0)
@@ -47,8 +57,15 @@ func _on_Send_pressed():
 	elif dest < 0:
 		dest = -_client.last_connected_client
 
-	Utils._log(_log_dest, "Sending data %s to %s" % [_line_edit.text, dest])
-	_client.send_data(_line_edit.text, dest)
+# ALPACAS
+	if _write_mode.get_selected_id() == 2:
+		Utils._log(_log_dest, "Sending data %s to Evennia" % [_line_edit.text])
+		_evennia.send_data(_line_edit.text)
+	else:
+		Utils._log(_log_dest, "Sending data %s to %s" % [_line_edit.text, dest])
+		_client.send_data(_line_edit.text, dest)
+# ALPACAS
+
 	_line_edit.text = ""
 
 
@@ -59,11 +76,19 @@ func _on_Connect_toggled( pressed ):
 			_write_mode.disabled = true
 		else:
 			_destination.disabled = true
-		_multiplayer.disabled = true
+			_multiplayer.disabled = true
 		if _host.text != "":
-			Utils._log(_log_dest, "Connecting to host: %s" % [_host.text])
-			var supported_protocols = PoolStringArray(["my-protocol2", "my-protocol", "binary"])
-			_client.connect_to_url(_host.text, supported_protocols, multiplayer)
+			# ALPACAS -- Add Evennia connect option
+			if _write_mode.get_selected_id() == 2:
+				Utils._log(_log_dest, "Connecting to Evennia server at IP: %s" % [_host.text])
+				_evennia.connect_to_server(_host.text, "4002")
+			else:
+				Utils._log(_log_dest, "Connecting to Godot host: %s" % [_host.text])
+				var supported_protocols = PoolStringArray(["my-protocol2", "my-protocol", "binary"])
+				_client.connect_to_url(_host.text, supported_protocols, multiplayer)
+			# ALPACAS
+			
+			
 	else:
 		_destination.disabled = false
 		_write_mode.disabled = false
