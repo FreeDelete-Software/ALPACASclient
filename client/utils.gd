@@ -21,6 +21,25 @@ func decode_data(data, is_string):
 	return bytes2var(data)
 
 
+# ALPACAS -- Add functions to process JSON data to/from Evennia
+func encode_evennia(user_input):
+	var input_arr = []
+	input_arr.append(user_input)
+	var data = JSON.print(["text", input_arr, {}])
+	print("Sending JSON string to server: %s" % [data])
+	return data.to_utf8()
+
+
+func decode_evennia(data):
+	print("Parsing data: %s" % [data])
+	var parsed_data = JSON.parse(data)
+	print("Result: %s" % [parsed_data])
+	var msg_array = parsed_data.result[1]
+	return msg_array[0]
+	
+# ALPACAS
+
+
 func _log(node, msg):
 	print(msg)
 	node.add_text(str(msg) + "\n")
