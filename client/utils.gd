@@ -31,15 +31,14 @@ func encode_evennia(user_input):
 
 
 func decode_evennia(data):
-	print("Parsing data: %s" % [data])
 	var parsed_data = JSON.parse(data)
-	print("Result: %s" % [parsed_data])
 	var msg_array = parsed_data.result[1]
 	return msg_array[0]
 	
 # ALPACAS
 
-
+# ALPACAS
 func _log(node, msg):
-	print(msg)
+	print("Displaying message.")
 	node.add_text(str(msg) + "\n")
+# ALPACAS
