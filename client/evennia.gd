@@ -56,9 +56,16 @@ func _client_disconnected(clean=true):
 
 # ALPACAS -- Simplify data_receive processing
 func _client_received(_p_id = 1):
-	print("Evennia -- Receiving data...")
+	print("Evennia -- Receiving packet...")
 	var packet = _client.get_peer(1).get_packet()
-	Utils._log(_log_dest, Utils.decode_evennia(packet.get_string_from_utf8()))
+	var packet_data = Utils.decode_evennia(packet.get_string_from_utf8())
+	var func_name = packet_data[0]
+	var msg = packet_data[1]
+	var _kwargs = packet_data[2]
+	if func_name == "text":
+		Utils._log(_log_dest, msg[0])
+	else:
+		print("Evennia -- Packet ignored.")
 # ALPACAS
 
 # ALPACAS
@@ -75,13 +82,12 @@ func disconnect_from_host():
 	_client.disconnect_from_host(1000, "Bye bye!")
 
 
-func send_data(data):
+# ALPACAS
+func send_data(data_utf):
 	print("Evennia -- Sending data...")
 	_client.get_peer(1).set_write_mode(_write_mode)
-
-	# ALPACAS - Only need the non-multiplayer for Evennia
-	_client.get_peer(1).put_packet(Utils.encode_evennia(data))
-	# ALPACAS
+	_client.get_peer(1).put_packet(data_utf)
+# ALPACAS
 
 
 func set_write_mode(mode):

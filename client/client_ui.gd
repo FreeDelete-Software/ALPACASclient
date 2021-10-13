@@ -59,8 +59,8 @@ func _on_Send_pressed():
 
 # ALPACAS
 	if _write_mode.get_selected_id() == 2:
-		Utils._log(_log_dest, "Sending data %s to Evennia" % [_line_edit.text])
-		_evennia.send_data(_line_edit.text)
+		Utils._log(_log_dest, "Sending command: %s" % [_line_edit.text])
+		_evennia.send_data(Utils.encode_evennia(["text", [_line_edit.text], {}]))
 	else:
 		Utils._log(_log_dest, "Sending data %s to %s" % [_line_edit.text, dest])
 		_client.send_data(_line_edit.text, dest)
