@@ -56,7 +56,7 @@ func _client_disconnected(clean=true):
 
 # ALPACAS -- Simplify data_receive processing
 func _client_received(_p_id = 1):
-	print("Evennia -- Receiving packet...")
+	print("ALPACAS -- Receiving packet...")
 	var packet = _client.get_peer(1).get_packet()
 	var packet_data = Utils.decode_evennia(packet.get_string_from_utf8())
 	var func_name = packet_data[0]
@@ -65,13 +65,13 @@ func _client_received(_p_id = 1):
 	if func_name == "text":
 		Utils._log(_log_dest, msg[0])
 	else:
-		print("Evennia -- Packet ignored.")
+		print("ALPACAS -- Packet ignored.")
 # ALPACAS
 
 # ALPACAS
 # Change connection function to take an address and port instead of URL.
 func connect_to_server(address, port):
-	print("Evennia -- Connecting...")
+	print("ALPACAS -- Connecting...")
 	var host = "ws://" + address + ":" + port
 	var multiplayer = false
 	var protocols = PoolStringArray()
@@ -84,7 +84,7 @@ func disconnect_from_host():
 
 # ALPACAS
 func send_data(data_utf):
-	print("Evennia -- Sending data...")
+	print("ALPACAS -- Sending data...")
 	_client.get_peer(1).set_write_mode(_write_mode)
 	_client.get_peer(1).put_packet(data_utf)
 # ALPACAS
