@@ -9,6 +9,12 @@
 
 extends Control
 
+# ALPACAS
+# Add vars for connection objects.
+onready var _evennia = $Evennia
+onready var _alpacas = $ALPACAS
+# ALPACAS
+
 onready var _client = $Client
 onready var _log_dest = $Panel/VBoxContainer/RichTextLabel
 onready var _line_edit = $Panel/VBoxContainer/Send/LineEdit
@@ -17,10 +23,6 @@ onready var _multiplayer = $Panel/VBoxContainer/Settings/Multiplayer
 onready var _write_mode = $Panel/VBoxContainer/Settings/Mode
 onready var _destination = $Panel/VBoxContainer/Settings/Destination
 
-# ALPACAS
-# Add var for Evennia connection node/script.
-onready var _evennia = $Evennia
-# ALPACAS
 
 func _ready():
 	_write_mode.clear()
@@ -32,6 +34,8 @@ func _ready():
 	# ALPACAS -- Add Evennia option to Mode menu
 	_write_mode.add_item("Evennia")
 	_write_mode.set_item_metadata(2, WebSocketPeer.WRITE_MODE_TEXT)
+	_write_mode.add_item("ALPACAS")
+	_write_mode.set_item_metadata(3, WebSocketPeer.WRITE_MODE_TEXT)
 	# ALPACAS
 
 	_destination.add_item("Broadcast")
@@ -61,6 +65,9 @@ func _on_Send_pressed():
 	if _write_mode.get_selected_id() == 2:
 		Utils._log(_log_dest, "Sending command: %s" % [_line_edit.text])
 		_evennia.send_data(Utils.encode_evennia(["text", [_line_edit.text], {}]))
+	elif _write_mode.get_selected_id() == 3:
+		Utils._log(_log_dest, "Sending command: %s" % [_line_edit.text])
+		_alpacas.send_data(Utils.encode_evennia(["text", [_line_edit.text], {}]))
 	else:
 		Utils._log(_log_dest, "Sending data %s to %s" % [_line_edit.text, dest])
 		_client.send_data(_line_edit.text, dest)
@@ -82,13 +89,16 @@ func _on_Connect_toggled( pressed ):
 			if _write_mode.get_selected_id() == 2:
 				Utils._log(_log_dest, "Connecting to Evennia server at IP: %s" % [_host.text])
 				_evennia.connect_to_server(_host.text, "4002")
+			elif _write_mode.get_selected_id() == 3:
+				Utils._log(_log_dest, "Connecting to ALPACAS portal at IP: %s" % [_host.text])
+				_alpacas.connect_to_server(_host.text, "4020")
 			else:
 				Utils._log(_log_dest, "Connecting to Godot host: %s" % [_host.text])
 				var supported_protocols = PoolStringArray(["my-protocol2", "my-protocol", "binary"])
 				_client.connect_to_url(_host.text, supported_protocols, multiplayer)
 			# ALPACAS
-			
-			
+
+
 	else:
 		_destination.disabled = false
 		_write_mode.disabled = false
