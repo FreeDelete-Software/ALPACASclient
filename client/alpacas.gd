@@ -9,85 +9,100 @@
 
 extends Node
 
+# Get the Node for writing output
 onready var _log_dest = get_parent().get_node("Panel/VBoxContainer/RichTextLabel")
 
-var _client = WebSocketClient.new()
+# Create WebSocketClient object
+var _wsclient = WebSocketClient.new()
 
-# ALPACAS
-# Set default write mode to text with no Godot multiplayer API
+# Write mode is *always* text
 var _write_mode = WebSocketPeer.WRITE_MODE_TEXT
-var _use_multiplayer = false
-# ALPACAS
 
-var last_connected_client = 1
-
-# ALPACAS
 func _init():
-	# Account for all signals from basic WebsocketClient, but no multiplayer API
-	_client.connect("connection_established", self, "_client_connected")
-	_client.connect("connection_error", self, "_client_disconnected")
-	_client.connect("connection_closed", self, "_client_disconnected")
-	_client.connect("server_close_request", self, "_client_close_request")
-	_client.connect("data_received", self, "_client_received")
-# ALPACAS
-
-func _client_close_request(code, reason):
-	Utils._log(_log_dest, "Close code: %d, reason: %s" % [code, reason])
-
-
-func _exit_tree():
-	_client.disconnect_from_host(1001, "Bye bye!")
+	# Account for all signals from basic WebsocketClient
+	_wsclient.connect("connection_established", self, "_client_connected")
+	_wsclient.connect("data_received", self, "_client_received")
+	_wsclient.connect("connection_error", self, "_client_disconnected")
+	_wsclient.connect("connection_closed", self, "_client_disconnected")
+	_wsclient.connect("server_close_request", self, "_client_close_request")
 
 
 func _process(_delta):
-	if _client.get_connection_status() == WebSocketClient.CONNECTION_DISCONNECTED:
+	# Poll regularly, unless disconnected.
+	if _wsclient.get_connection_status() == WebSocketClient.CONNECTION_DISCONNECTED:
 		return
+	_wsclient.poll()
 
-	_client.poll()
+
+func _exit_tree():
+	# Disconnect on close. Standard WebSocket Code 1001: Going Away
+	_wsclient.disconnect_from_host(1001, "Going away.")
 
 
 func _client_connected(protocol):
-	Utils._log(_log_dest, "Client just connected with protocol: %s" % protocol)
-	_client.get_peer(1).set_write_mode(_write_mode)
+	#
+	# Called by "connection_established" signal
+	#
+	print("ALPACAS -- Connection established.")
+	Utils._log(_log_dest, "Connection established!")
+	
+	# Ensure the write mode is text on connect
+	_wsclient.get_peer(1).set_write_mode(_write_mode)
 
 
-func _client_disconnected(clean=true):
-	Utils._log(_log_dest, "Client just disconnected. Was clean: %s" % clean)
-
-# ALPACAS -- Simplify data_receive processing
 func _client_received(_p_id = 1):
+	#
+	# Called by "data_received" signal
+	#
 	print("ALPACAS -- Receiving packet...")
-	var packet = _client.get_peer(1).get_packet()
+	
+	# Get packet data
+	var packet = _wsclient.get_peer(1).get_packet()
 	var packet_data = Utils.decode_evennia(packet.get_string_from_utf8())
+	
+	# Break data into individual components, similar to how Evennia names them.
 	var func_name = packet_data[0]
 	var msg = packet_data[1]
 	var _kwargs = packet_data[2]
+	
+	# Handle message
 	if func_name == "text":
+		# Messages with an inputfunc of "text" are displayed to the user.
 		Utils._log(_log_dest, msg[0])
 	else:
 		print("ALPACAS -- Packet ignored.")
-# ALPACAS
 
-# ALPACAS
-# Change connection function to take an address and port instead of URL.
+
+func _client_disconnected(clean=true):
+	#
+	# Called by "connection_error" and "connection_closed" signals
+	#
+	Utils._log(_log_dest, "Client just disconnected. Was clean: %s" % clean)
+
+
+func _client_close_request(code, reason):
+	#
+	# Called by "server_close_request" signal
+	#
+	Utils._log(_log_dest, "Close code: %d, reason: %s" % [code, reason])
+
+
 func connect_to_server(address, port):
+	# Connect based on address and port.
 	print("ALPACAS -- Connecting...")
 	var host = "ws://%s:%s" % [address, port]
+	
+	# Specifying a sub-protocol doesn't seem to work properly.
+	# Leaving it blank (for now)
 	var protocols = PoolStringArray()
-	return _client.connect_to_url(host, protocols)
-# ALPACAS
-
-func disconnect_from_host():
-	_client.disconnect_from_host(1000, "Bye bye!")
+	return _wsclient.connect_to_url(host, protocols)
 
 
-# ALPACAS
 func send_data(data_utf):
 	print("ALPACAS -- Sending data...")
-	_client.get_peer(1).set_write_mode(_write_mode)
-	_client.get_peer(1).put_packet(data_utf)
-# ALPACAS
+#	_wsclient.get_peer(1).set_write_mode(_write_mode)
+	_wsclient.get_peer(1).put_packet(data_utf)
 
 
-func set_write_mode(mode):
-	_write_mode = mode
+func disconnect_from_host():
+	_wsclient.disconnect_from_host(1000, "Bye bye!")
