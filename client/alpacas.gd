@@ -72,10 +72,9 @@ func _client_received(_p_id = 1):
 # Change connection function to take an address and port instead of URL.
 func connect_to_server(address, port):
 	print("ALPACAS -- Connecting...")
-	var host = "ws://" + address + ":" + port
-	var multiplayer = false
+	var host = "ws://%s:%s" % [address, port]
 	var protocols = PoolStringArray()
-	return _client.connect_to_url(host, protocols, multiplayer)
+	return _client.connect_to_url(host, protocols)
 # ALPACAS
 
 func disconnect_from_host():

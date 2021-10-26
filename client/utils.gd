@@ -9,19 +9,6 @@
 
 extends Node
 
-func encode_data(data, mode):
-	if mode == WebSocketPeer.WRITE_MODE_TEXT:
-		return data.to_utf8()
-	return var2bytes(data)
-
-
-func decode_data(data, is_string):
-	if is_string:
-		return data.get_string_from_utf8()
-	return bytes2var(data)
-
-
-# ALPACAS -- Add functions to process JSON data to/from Evennia
 func encode_evennia(input_array):
 	var data = JSON.print(input_array)
 	return data.to_utf8()
@@ -30,10 +17,7 @@ func encode_evennia(input_array):
 func decode_evennia(data):
 	var parsed_data = JSON.parse(data)
 	return parsed_data.result
-# ALPACAS
 
-# ALPACAS
 func _log(node, msg):
 	print("Displaying message.")
 	node.add_text(str(msg) + "\n")
-# ALPACAS
