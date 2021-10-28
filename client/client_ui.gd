@@ -49,6 +49,9 @@ func _on_Send_pressed():
 	
 	# Encode and send data.
 	_client.send_data(Utils.encode_evennia(["text", [_line_edit.text], {}]))
+	
+	# Clear out input field
+	_line_edit.text = ""
 
 
 func _on_Connect_toggled( pressed ):
