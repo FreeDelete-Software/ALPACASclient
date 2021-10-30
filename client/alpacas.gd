@@ -9,6 +9,10 @@
 
 extends Node
 
+# Initialize signals
+signal alpacas_open
+signal alpacas_closed
+
 # Get the Node for writing output
 onready var _log_dest = get_parent().get_node("Panel/VBoxContainer/RichTextLabel")
 
@@ -43,6 +47,11 @@ func _client_connected(protocol):
 	#
 	# Called by "connection_established" signal
 	#
+	
+	# Emit the open signal.
+	emit_signal("alpacas_open")
+	
+	# Display some output
 	print("ALPACAS -- Connection established.")
 	Utils._log(_log_dest, "Connection established!")
 	
@@ -77,7 +86,13 @@ func _client_disconnected(clean=true):
 	#
 	# Called by "connection_error" and "connection_closed" signals
 	#
+	
+	# Emit the closed signal.
+	emit_signal("alpacas_closed")
+	
+	# Display some output
 	Utils._log(_log_dest, "Client just disconnected. Was clean: %s" % clean)
+	print("Connection closed.")
 
 
 func _client_close_request(code, reason):
