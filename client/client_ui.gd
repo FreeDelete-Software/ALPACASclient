@@ -40,18 +40,7 @@ func _on_Mode_item_selected(_id):
 
 
 func _on_Send_pressed():
-	if _line_edit.text == "":
-		# Don't send blank lines
-		return
-	
-	# Show command that was sent
-	Utils._log(_log_dest, "Sending command: %s" % [_line_edit.text])
-	
-	# Encode and send data.
-	_client.send_data(Utils.encode_evennia(["text", [_line_edit.text], {}]))
-	
-	# Clear out input field
-	_line_edit.text = ""
+	_on_LineEdit_text_entered(_line_edit.text)
 
 
 func _on_Connect_toggled( pressed ):
@@ -69,3 +58,18 @@ func _on_Connect_toggled( pressed ):
 		# Disconnect and enable mode selection when un-toggled.
 		_client.disconnect_from_host()
 		_client_mode.disabled = false
+
+
+func _on_LineEdit_text_entered(_command):
+	if _command== "":
+		# Don't send blank lines
+		return
+	
+	# Show command that was sent
+	Utils._log(_log_dest, "Sending command: %s" % [_command])
+	
+	# Encode and send data.
+	_client.send_data(Utils.encode_evennia(["text", [_command], {}]))
+	
+	# Clear out input field
+	_line_edit.text = ""
