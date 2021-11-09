@@ -71,7 +71,10 @@ text = "Send"
 margin_top = 80.0
 margin_right = 1024.0
 margin_bottom = 600.0
+focus_mode = 2
 size_flags_vertical = 3
+scroll_following = true
+selection_enabled = true
 
 [node name="Evennia" type="Node" parent="."]
 script = ExtResource( 3 )
