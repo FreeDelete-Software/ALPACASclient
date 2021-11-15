@@ -31,8 +31,7 @@ margin_bottom = 24.0
 margin_right = 956.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
-text = "Enter IP address"
-placeholder_text = "127.0.0.1"
+placeholder_text = "IP address or hostname"
 
 [node name="Connect" type="Button" parent="Panel/VBoxContainer/Connect"]
 margin_left = 960.0
@@ -73,6 +72,9 @@ margin_right = 1024.0
 margin_bottom = 600.0
 focus_mode = 2
 size_flags_vertical = 3
+bbcode_enabled = true
+bbcode_text = "Welcome to [color=lime][b]ALPACASclient[/b][/color]! Enter an Evennia server's IP address or hostname above. (eg. 127.0.0.1, localhost, or www.example.com)"
+text = "Welcome to ALPACASclient! Enter an Evennia server's IP address or hostname above. (eg. 127.0.0.1, localhost, or www.example.com)"
 scroll_following = true
 selection_enabled = true
 
