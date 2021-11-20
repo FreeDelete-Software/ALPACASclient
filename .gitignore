@@ -11,4 +11,6 @@ export_presets.cfg
 data_*/
 
 # ALPACASclient artwork directroy.
-art/!README.md
+!art
+art/*
+!art/README.md
