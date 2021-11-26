@@ -35,7 +35,6 @@ func _init():
 func _process(_delta):
 	# Poll regularly, unless disconnected.
 	if _wsclient.get_connection_status() == WebSocketClient.CONNECTION_DISCONNECTED:
-		emit_signal("alpacas_closed")
 		return
 	_wsclient.poll()
 
@@ -43,9 +42,10 @@ func _process(_delta):
 func _exit_tree():
 	# Disconnect on close. Standard WebSocket Code 1001: Going Away
 	_wsclient.disconnect_from_host(1001, "Going away.")
+	emit_signal("alpacas_closed")
 
 
-func _client_connected(protocol):
+func _client_connected(_protocol):
 	#
 	# Called by "connection_established" signal
 	#
@@ -81,7 +81,7 @@ func _client_disconnected(clean=true):
 	
 	# Display some output
 	Utils._log(_log_dest, "Client just disconnected. Was clean: %s" % clean)
-	print("Connection closed.")
+	emit_signal("alpacas_closed")
 
 
 func _client_close_request(code, reason):
@@ -89,6 +89,7 @@ func _client_close_request(code, reason):
 	# Called by "server_close_request" signal
 	#
 	Utils._log(_log_dest, "Close code: %d, reason: %s" % [code, reason])
+	emit_signal("alpacas_closed")
 
 
 func connect_to_server(address, port):
@@ -110,3 +111,4 @@ func send_data(data_utf):
 
 func disconnect_from_host():
 	_wsclient.disconnect_from_host(1000, "Bye bye!")
+	emit_signal("alpacas_closed")
