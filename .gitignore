@@ -14,4 +14,4 @@ data_*/
 !art
 art/*
 !art/README.md
-!art/default/*
+!art/default
