@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://render/render.gd" type="Script" id=1]
 [ext_resource path="res://font/cmu-typewriter/Typewriter.tres" type="DynamicFont" id=2]
+[ext_resource path="res://art/default/empty_room1024x576.png" type="Texture" id=3]
+[ext_resource path="res://render/player/player.tscn" type="PackedScene" id=4]
 
 [node name="Render" type="Control"]
 margin_right = 1024.0
@@ -16,6 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+texture = ExtResource( 3 )
 expand = true
 stretch_mode = 1
 __meta__ = {
@@ -33,3 +36,9 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Player" parent="." instance=ExtResource( 4 )]
+margin_left = -18.761
+margin_top = 320.117
+margin_right = -18.761
+margin_bottom = 320.117
