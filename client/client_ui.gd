@@ -73,3 +73,12 @@ func _on_LineEdit_text_entered(_command):
 	
 	# Clear out input field
 	_line_edit.text = ""
+
+
+func _on_alpacas_received(inputfunc, args, _kwargs):
+	# Handle message
+	if inputfunc == "text":
+		# Messages with an inputfunc of "text" are displayed to the user.
+		Utils._log(_log_dest, args[0])
+	else:
+		print("ALPACAS -- Packet ignored.")

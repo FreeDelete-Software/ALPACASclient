@@ -12,6 +12,7 @@ extends Node
 # Initialize signals
 signal alpacas_open
 signal alpacas_closed
+signal alpacas_received(inputfunc, args, kwargs)
 
 # Get the Node for writing output
 onready var _log_dest = get_parent().get_node("Panel/VBoxContainer/RichTextLabel")
@@ -69,17 +70,7 @@ func _client_received(_p_id = 1):
 	var packet = _wsclient.get_peer(1).get_packet()
 	var packet_data = Utils.decode_evennia(packet.get_string_from_utf8())
 	
-	# Break data into individual components, similar to how Evennia names them.
-	var func_name = packet_data[0]
-	var msg = packet_data[1]
-	var _kwargs = packet_data[2]
-	
-	# Handle message
-	if func_name == "text":
-		# Messages with an inputfunc of "text" are displayed to the user.
-		Utils._log(_log_dest, msg[0])
-	else:
-		print("ALPACAS -- Packet ignored.")
+	emit_signal("alpacas_received", packet_data[0], packet_data[1], packet_data[2])
 
 
 func _client_disconnected(clean=true):
