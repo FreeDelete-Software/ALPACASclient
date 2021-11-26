@@ -35,6 +35,7 @@ func _init():
 func _process(_delta):
 	# Poll regularly, unless disconnected.
 	if _wsclient.get_connection_status() == WebSocketClient.CONNECTION_DISCONNECTED:
+		emit_signal("alpacas_closed")
 		return
 	_wsclient.poll()
 
@@ -77,9 +78,6 @@ func _client_disconnected(clean=true):
 	#
 	# Called by "connection_error" and "connection_closed" signals
 	#
-	
-	# Emit the closed signal.
-	emit_signal("alpacas_closed")
 	
 	# Display some output
 	Utils._log(_log_dest, "Client just disconnected. Was clean: %s" % clean)

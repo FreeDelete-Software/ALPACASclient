@@ -16,3 +16,5 @@ __meta__ = {
 margin_left = 1024.0
 margin_right = -1.0
 margin_bottom = -1.0
+
+[connection signal="logged_in" from="Client" to="Render" method="_on_Client_logged_in"]

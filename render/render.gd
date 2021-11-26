@@ -2,6 +2,10 @@ extends Control
 
 func _ready():
 	print("Started scene rendering.")
+	logged_out_state()
+
+
+func logged_out_state():
 	set_scene_background("default/white_1024x576.png")
 	set_room_name("Not logged in!")
 
@@ -12,3 +16,10 @@ func set_scene_background(art_name):
 
 func set_room_name(name):
 	$RoomName.text = name
+
+
+func _on_Client_logged_in(is_logged_in):
+	if is_logged_in:
+		set_room_name("Logged in!")
+	else:
+		logged_out_state()

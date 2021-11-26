@@ -86,4 +86,5 @@ script = ExtResource( 4 )
 [connection signal="item_selected" from="Panel/VBoxContainer/Settings/Mode" to="." method="_on_Mode_item_selected"]
 [connection signal="text_entered" from="Panel/VBoxContainer/Send/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="Panel/VBoxContainer/Send/Send" to="." method="_on_Send_pressed"]
+[connection signal="alpacas_closed" from="ALPACAS" to="." method="_on_alpacas_closed"]
 [connection signal="alpacas_received" from="ALPACAS" to="." method="_on_alpacas_received"]
