@@ -11,6 +11,7 @@ extends Control
 
 # Set signals for OOB message relaying
 signal logged_in(status_bool)
+signal render(args, kwargs)
 
 # Use ALPACAS connection by default
 onready var _client = $ALPACAS
@@ -85,6 +86,8 @@ func _on_alpacas_received(inputfunc, args, _kwargs):
 		Utils._log(_log_dest, args[0])
 	elif inputfunc == "logged_in":
 		emit_signal("logged_in", true)
+	elif inputfunc == "render":
+		emit_signal("render", args, _kwargs)
 	else:
 		print("Client -- Packet ignored.")
 

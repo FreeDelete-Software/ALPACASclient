@@ -1,5 +1,7 @@
 extends Control
 
+var default_bg = "default/empty_room1024x576.png"
+
 func _ready():
 	print("Started scene rendering.")
 	logged_out_state()
@@ -12,11 +14,30 @@ func logged_out_state():
 
 
 func set_scene_background(art_name):
-	$Background.texture = load("res://art/%s" % art_name)
+	var res_path = "res://art/%s" % art_name
+	
+	var checkFile = File.new()
+	if checkFile.file_exists(res_path):
+		$Background.texture = load(res_path)
+	else:
+		# Use default bg image if FNF
+		print("File not found: %s" % res_path)
+		$Background.texture = load(default_bg)
 
 
 func set_room_name(name):
 	$RoomName.text = name
+
+
+func render_new_room(room_dict):
+	print("Rendering new room...")
+	print(str(room_dict))
+	
+	set_room_name(room_dict["room_name"])
+	if room_dict["room_art"] == null:
+		set_scene_background(default_bg)
+	else:
+		set_scene_background(room_dict["room_art"])
 
 
 func _on_Client_logged_in(is_logged_in):
@@ -26,3 +47,11 @@ func _on_Client_logged_in(is_logged_in):
 		$Player.visible = true
 	else:
 		logged_out_state()
+
+
+func _on_Client_render(args, kwargs):
+	var art_file
+	for arg in args:
+		if arg == "new_room":
+			render_new_room(kwargs)
+			
