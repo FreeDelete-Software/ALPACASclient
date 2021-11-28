@@ -21,7 +21,7 @@ onready var _client_port = 4020
 onready var _log_dest = $Panel/VBoxContainer/RichTextLabel
 onready var _line_edit = $Panel/VBoxContainer/Send/LineEdit
 onready var _host = $Panel/VBoxContainer/Connect/Host
-onready var _client_mode = $Panel/VBoxContainer/Settings/Mode
+onready var _client_mode = $Panel/VBoxContainer/Connect/Mode
 
 
 func _ready():

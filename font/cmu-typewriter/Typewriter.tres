@@ -5,6 +5,6 @@
 [resource]
 resource_name = "Typewriter"
 size = 32
-outline_size = 1
-outline_color = Color( 0.435294, 0.435294, 0.435294, 1 )
+outline_size = 2
+outline_color = Color( 0.698039, 0.698039, 0.698039, 1 )
 font_data = ExtResource( 1 )
