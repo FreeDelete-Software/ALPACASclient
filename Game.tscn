@@ -13,8 +13,9 @@ __meta__ = {
 [node name="Render" parent="." instance=ExtResource( 1 )]
 
 [node name="Client" parent="." instance=ExtResource( 2 )]
-margin_left = -250.0
-margin_right = 250.0
+margin_left = -370.0
+margin_right = 370.0
 
 [connection signal="logged_in" from="Client" to="Render" method="_on_Client_logged_in"]
 [connection signal="render" from="Client" to="Render" method="_on_Client_render"]
+[connection signal="text_msg" from="Client" to="Render" method="_on_Client_text_msg"]

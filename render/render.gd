@@ -2,6 +2,8 @@ extends Control
 
 var default_bg = "default/empty_room1024x576.png"
 
+onready var text_out = $Messages/Text
+
 func _ready():
 	print("Started scene rendering.")
 	logged_out_state()
@@ -54,4 +56,10 @@ func _on_Client_render(args, kwargs):
 	for arg in args:
 		if arg == "new_room":
 			render_new_room(kwargs)
+		if arg == "add_obj":
+			print("Objects rendering skipped...")
 			
+
+
+func _on_Client_text_msg(string_msg):
+	text_out.add_text(string_msg)

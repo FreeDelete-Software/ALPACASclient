@@ -12,6 +12,7 @@ extends Control
 # Set signals for OOB message relaying
 signal logged_in(status_bool)
 signal render(args, kwargs)
+signal text_msg(string_msg)
 
 # Use ALPACAS connection by default
 onready var _client = $ALPACAS
@@ -66,7 +67,8 @@ func _on_Connect_toggled( pressed ):
 
 func _on_LineEdit_text_entered(_command):
 	if _command== "":
-		# Don't send blank lines
+		# Send newline in text_msg signal, but send nothing over network
+		emit_signal("text_msg", "\n")
 		return
 	
 	# Show command that was sent
@@ -82,8 +84,7 @@ func _on_LineEdit_text_entered(_command):
 func _on_alpacas_received(inputfunc, args, _kwargs):
 	# Handle message
 	if inputfunc == "text":
-		# Messages with an inputfunc of "text" are displayed to the user.
-		Utils._log(_log_dest, args[0])
+		emit_signal("text_msg",args[0])
 	elif inputfunc == "logged_in":
 		emit_signal("logged_in", true)
 	elif inputfunc == "render":

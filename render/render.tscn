@@ -1,9 +1,25 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://render/render.gd" type="Script" id=1]
-[ext_resource path="res://font/cmu-typewriter/Typewriter.tres" type="DynamicFont" id=2]
+[ext_resource path="res://art/default/chatbox.png" type="Texture" id=2]
 [ext_resource path="res://art/default/empty_room1024x576.png" type="Texture" id=3]
 [ext_resource path="res://render/player/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://font/cmu-typewriter/Typewriter/cmuntt.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+outline_size = 2
+outline_color = Color( 0.52549, 0.52549, 0.52549, 1 )
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 2 )
+region_rect = Rect2( 0, 0, 512, 256 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 18
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 5 )
 
 [node name="Render" type="Control"]
 anchor_right = 1.0
@@ -28,7 +44,7 @@ __meta__ = {
 [node name="RoomName" type="Label" parent="."]
 anchor_right = 1.0
 margin_bottom = 41.0
-custom_fonts/font = ExtResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Room Name"
 align = 1
@@ -44,3 +60,25 @@ margin_left = -21.527
 margin_top = -255.632
 margin_right = -21.527
 margin_bottom = -255.632
+
+[node name="Messages" type="PanelContainer" parent="."]
+anchor_bottom = 0.5
+margin_right = 800.0
+margin_bottom = 2.0
+custom_styles/panel = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="RichTextLabel" parent="Messages"]
+margin_right = 800.0
+margin_bottom = 290.0
+focus_mode = 2
+custom_fonts/normal_font = SubResource( 3 )
+custom_colors/default_color = Color( 0.894118, 0.894118, 0.894118, 1 )
+text = "Welcome to the ALPACASclient prototype!"
+scroll_following = true
+selection_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
