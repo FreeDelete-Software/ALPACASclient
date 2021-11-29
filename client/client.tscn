@@ -42,23 +42,40 @@ selection_enabled = true
 margin_right = 600.0
 margin_bottom = 24.0
 
+[node name="Mode" type="OptionButton" parent="Panel/VBoxContainer/Connect"]
+margin_right = 29.0
+margin_bottom = 24.0
+
 [node name="Host" type="LineEdit" parent="Panel/VBoxContainer/Connect"]
-margin_right = 499.0
+margin_left = 33.0
+margin_right = 196.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 placeholder_text = "Enter hostname or IP (eg. www.server.tld, 192.168.1.2)"
 
+[node name="UserName" type="LineEdit" parent="Panel/VBoxContainer/Connect"]
+margin_left = 200.0
+margin_right = 364.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+expand_to_text_length = true
+placeholder_text = "User"
+
+[node name="Password" type="LineEdit" parent="Panel/VBoxContainer/Connect"]
+margin_left = 368.0
+margin_right = 532.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+secret = true
+secret_character = "@"
+placeholder_text = "Password"
+
 [node name="Connect" type="Button" parent="Panel/VBoxContainer/Connect"]
-margin_left = 503.0
-margin_right = 567.0
+margin_left = 536.0
+margin_right = 600.0
 margin_bottom = 24.0
 toggle_mode = true
 text = "Connect"
-
-[node name="Mode" type="OptionButton" parent="Panel/VBoxContainer/Connect"]
-margin_left = 571.0
-margin_right = 600.0
-margin_bottom = 24.0
 
 [node name="Send" type="HBoxContainer" parent="Panel/VBoxContainer"]
 margin_top = 28.0
@@ -83,9 +100,11 @@ script = ExtResource( 3 )
 [node name="ALPACAS" type="Node" parent="."]
 script = ExtResource( 4 )
 
-[connection signal="toggled" from="Panel/VBoxContainer/Connect/Connect" to="." method="_on_Connect_toggled"]
 [connection signal="item_selected" from="Panel/VBoxContainer/Connect/Mode" to="." method="_on_Mode_item_selected"]
+[connection signal="text_entered" from="Panel/VBoxContainer/Connect/Password" to="." method="_on_Password_text_entered"]
+[connection signal="toggled" from="Panel/VBoxContainer/Connect/Connect" to="." method="_on_Connect_toggled"]
 [connection signal="text_entered" from="Panel/VBoxContainer/Send/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="Panel/VBoxContainer/Send/Send" to="." method="_on_Send_pressed"]
 [connection signal="alpacas_closed" from="ALPACAS" to="." method="_on_alpacas_closed"]
+[connection signal="alpacas_open" from="ALPACAS" to="." method="_on_alpacas_open"]
 [connection signal="alpacas_received" from="ALPACAS" to="." method="_on_alpacas_received"]

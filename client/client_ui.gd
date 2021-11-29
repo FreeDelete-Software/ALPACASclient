@@ -23,7 +23,9 @@ onready var _log_dest = $Panel/VBoxContainer/RichTextLabel
 onready var _line_edit = $Panel/VBoxContainer/Send/LineEdit
 onready var _host = $Panel/VBoxContainer/Connect/Host
 onready var _client_mode = $Panel/VBoxContainer/Connect/Mode
-
+onready var _username = $Panel/VBoxContainer/Connect/UserName
+onready var _password = $Panel/VBoxContainer/Connect/Password
+onready var _connect_btn = $Panel/VBoxContainer/Connect/Connect
 
 func _ready():
 	# Add menu options for the mode
@@ -52,9 +54,12 @@ func _on_Connect_toggled( pressed ):
 	if pressed:
 		# Disable mode selection while connected
 		_client_mode.disabled = true
+		_host.editable = false
+		_username.editable = false
+		_password.editable = false
 		
 		if _host.text != "":
-			# Connect based on input text and hardcoded port.
+			# Connect based on input text and mode-selected port.
 			Utils._log(_log_dest, "Connecting to ALPACAS portal at IP: %s" % [_host.text])
 			_client.connect_to_server(_host.text, _client_port)
 			# This could probably use some better input validation.
@@ -63,6 +68,9 @@ func _on_Connect_toggled( pressed ):
 		# Disconnect and enable mode selection when un-toggled.
 		_client.disconnect_from_host()
 		_client_mode.disabled = false
+		_host.editable = true
+		_username.editable = true
+		_password.editable = true
 
 
 func _on_LineEdit_text_entered(_command):
@@ -82,7 +90,7 @@ func _on_LineEdit_text_entered(_command):
 
 
 func _on_alpacas_received(inputfunc, args, _kwargs):
-	# Handle message
+	# Send messages elsewhere via signlas.
 	if inputfunc == "text":
 		emit_signal("text_msg",args[0])
 	elif inputfunc == "logged_in":
@@ -95,4 +103,25 @@ func _on_alpacas_received(inputfunc, args, _kwargs):
 
 func _on_alpacas_closed():
 	print("Connection closed.")
+	_connect_btn.pressed = false
 	emit_signal("logged_in", false)
+
+
+func _on_alpacas_open():
+	# Attempt to log in automatically when connection is opened.
+	if _username.text != "":
+		if _password.text != "":
+			print("Attempting to log in based on user input...")
+			var login_string = "connect %s %s" % [_username.text, _password.text]
+			_client.send_data(Utils.encode_evennia(["text", [login_string], {}]))
+	
+	# Clear password after connecting no matter what happens.
+	_password.text = ""
+
+
+func _on_Password_text_entered(new_text):
+	# Immediately forget instructions.
+	new_text = null
+	
+	# Press the button
+	_connect_btn.pressed = true
