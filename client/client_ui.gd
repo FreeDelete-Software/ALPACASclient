@@ -119,9 +119,13 @@ func _on_alpacas_open():
 	_password.text = ""
 
 
-func _on_Password_text_entered(new_text):
+func _on_Password_text_entered(_new_text):
 	# Immediately forget instructions.
-	new_text = null
+	_new_text = null
 	
 	# Press the button
 	_connect_btn.pressed = true
+
+
+func _on_Render_send_command(cmd_string):
+	_client.send_data(Utils.encode_evennia(["text", [cmd_string], {}]))
