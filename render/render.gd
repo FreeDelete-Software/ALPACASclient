@@ -52,13 +52,14 @@ func render_new_room(room_dict):
 		set_scene_background(room_dict["room_art"])
 
 
-func render_exit(exit_dict):
-	var this_exit = _interactive.instance()
-	this_exit.display_name = exit_dict["display_name"]
-	this_exit.key_name = exit_dict["key_name"]
-	this_exit.default_texture = "default/door200.png"
-	this_exit.connect("left_clicked", self, "_on_exit_clicked")
-	_exits_container.add_child(this_exit)
+func render_interactive(obj_dict):
+	var this_obj = _interactive.instance()
+	this_obj.display_name = obj_dict["display_name"]
+	this_obj.key_name = obj_dict["key_name"]
+	if obj_dict["obj_type"] == "exit":
+		this_obj.default_texture = "default/door200.png"
+		this_obj.connect("left_clicked", self, "_on_exit_clicked")
+		_exits_container.add_child(this_obj)
 
 
 func unrender_all_scenery():
@@ -92,8 +93,7 @@ func _on_Client_render(args, kwargs):
 			render_new_room(kwargs)
 		if arg == "add_objects":
 			for obj_dict in kwargs["obj_list"]:
-				if obj_dict["obj_type"] == "exit":
-					render_exit(obj_dict)
+				render_interactive(obj_dict)
 
 
 func _on_Client_text_msg(string_msg):
