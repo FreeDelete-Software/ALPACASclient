@@ -5,13 +5,15 @@ signal send_command(cmd_string)
 var default_bg = "default/empty_room1024x576.png"
 
 onready var text_out = $Messages/Text
-onready var _exits_container = $Exits
+onready var _exits_container = $Scenery/Exits
+onready var _objects_container = $Scenery/Objects
 onready var _cmdgen = $CmdGen
 
 var exit_scene = load("res://render/exit/exit.tscn")
+var _interactive = load("res://render/interactive/interactive.tscn")
 
 func _ready():
-	print("Started scene rendering.")
+	print("render.gd -- Started scene rendering.")
 	logged_out_state()
 
 
@@ -22,15 +24,12 @@ func logged_out_state():
 	$Player.visible = false
 
 
-func set_scene_background(art_name):
-	var res_path = "res://art/%s" % art_name
-	
-	var checkFile = File.new()
-	if checkFile.file_exists(res_path):
-		$Background.texture = load(res_path)
+func set_scene_background(art_path):
+	if Utils._art_exists(art_path):
+		$Background.texture = load("res://art/%s" % art_path)
 	else:
 		# Use default bg image if FNF
-		print("File not found: %s" % res_path)
+		print("render.gd -- File not found: %s" % art_path)
 		$Background.texture = load(default_bg)
 
 
@@ -39,7 +38,7 @@ func set_room_name(name):
 
 
 func render_new_room(room_dict):
-	print("Rendering new room...")
+	print("render.gd -- Rendering new room...")
 	
 	# Remove everything in the current scene.
 	unrender_all_scenery()
@@ -55,15 +54,18 @@ func render_new_room(room_dict):
 
 
 func render_exit(exit_dict):
-	var this_exit = exit_scene.instance()
+	var this_exit = _interactive.instance()
 	this_exit.display_name = exit_dict["display_name"]
 	this_exit.key_name = exit_dict["key_name"]
+	this_exit.default_texture = "default/door200.png"
 	this_exit.connect("left_clicked", self, "_on_exit_clicked")
 	_exits_container.add_child(this_exit)
 
 
 func unrender_all_scenery():
 	for node in _exits_container.get_children():
+		unrender(node)
+	for node in _objects_container.get_children():
 		unrender(node)
 
 
@@ -79,14 +81,13 @@ func _on_exit_clicked(exit_key):
 func _on_Client_logged_in(is_logged_in):
 	if is_logged_in:
 		set_room_name("Logged in!")
-		set_scene_background("default/empty_room1024x576.png")
 		$Player.visible = true
 	else:
 		logged_out_state()
 
 
 func _on_Client_render(args, kwargs):
-	print(str(kwargs))
+	print("render.gd -- Received kwargs: %s" % kwargs)
 	for arg in args:
 		if arg == "new_room":
 			render_new_room(kwargs)
@@ -94,7 +95,6 @@ func _on_Client_render(args, kwargs):
 			for obj_dict in kwargs["obj_list"]:
 				if obj_dict["obj_type"] == "exit":
 					render_exit(obj_dict)
-			
 
 
 func _on_Client_text_msg(string_msg):

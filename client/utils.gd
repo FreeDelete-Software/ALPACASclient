@@ -39,6 +39,26 @@ func decode_evennia(data_string):
 func _log(node, msg):
 	#
 	# Send text output to a specific node.
+	# 
+	# !NOTE!
+	# This is only implemented in client_ui, where its RichTextLable is not
+	# visible. It should probably be updated to become a **real** logging 
+	# function at some point.
 	#
 	print("Displaying message.")
 	node.add_text(str(msg) + "\n")
+
+func _art_exists(art_path):
+	#
+	# Verifies an art_path.
+	#
+	# All art_path strings in ALPACASclient should be a path to a file in the 
+	# context of the 'art' directory. This is used to verify that any reference
+	# to art resources are valid before attempting to use them.
+	#
+	var file_obj = File.new()
+	var file_path = "res://art/%s" % art_path
+	if file_obj.file_exists(file_path):
+		return true
+	else:
+		return false
