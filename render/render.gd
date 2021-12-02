@@ -9,7 +9,6 @@ onready var _exits_container = $Scenery/Exits
 onready var _objects_container = $Scenery/Objects
 onready var _cmdgen = $CmdGen
 
-var exit_scene = load("res://render/exit/exit.tscn")
 var _interactive = load("res://render/interactive/interactive.tscn")
 
 func _ready():
