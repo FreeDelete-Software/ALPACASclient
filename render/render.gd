@@ -24,7 +24,7 @@ func logged_out_state():
 
 
 func set_scene_background(art_path):
-	if Utils._art_exists(art_path):
+	if (Utils._art_exists(art_path)) == true:
 		$Background.texture = load("res://art/%s" % art_path)
 	else:
 		# Use default bg image if FNF
@@ -59,6 +59,7 @@ func render_interactive(obj_dict):
 	if obj_dict["obj_type"] == "exit":
 		this_obj.default_texture = "default/door200.png"
 		this_obj.connect("left_clicked", self, "_on_exit_clicked")
+		Utils._anchor_node_center_bottom(this_obj)
 		_exits_container.add_child(this_obj)
 
 

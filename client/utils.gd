@@ -62,3 +62,9 @@ func _art_exists(art_path):
 		return true
 	else:
 		return false
+
+func _anchor_node_center_bottom(node):
+	node.anchor_left = 0.5
+	node.anchor_top = 1
+	node.anchor_right = 0.5
+	node.anchor_bottom = 1

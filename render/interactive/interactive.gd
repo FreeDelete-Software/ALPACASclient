@@ -13,9 +13,9 @@ signal right_clicked(key_str)
 var default_texture = "default/error.png"
 
 # Variables set at load time when instanced.
-var display_name = ""
-var key_name = ""
-var sprite_file = ""
+var display_name = "default"
+var key_name = "default"
+var sprite_file = "default"
 
 
 func _ready():
@@ -26,11 +26,16 @@ func _ready():
 
 func update_texture(art_path):
 	var full_path = "res://art/"
-	if Utils._art_exists(art_path):
+	if (Utils._art_exists(art_path)) == true:
 		full_path += art_path
 	else:
 		full_path += default_texture
 	$Texture.texture = load(full_path)
+	var texture_size = $Texture.texture.get_size()
+	$Texture.margin_left = -texture_size.x / 2
+	$Texture.margin_right = -texture_size.x /2
+	$Texture.margin_top = -texture_size.y / 2
+	$Texture.margin_bottom = -texture_size.x /2
 
 
 func _on_gui_input(event):
