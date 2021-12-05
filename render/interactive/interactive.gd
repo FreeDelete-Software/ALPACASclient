@@ -41,7 +41,7 @@ func update_texture(art_path):
 func _on_gui_input(event):
 	if (event is InputEventMouseButton) and (event.pressed == true):
 		# Get only the events we are looking for and emit results.
-		print(str(event.button_index))
+#		print(str(event.button_index))
 		if event.button_index == 1:
 			print("interactive.gd -- Left-click registered on object.")
 			emit_signal("left_clicked", key_name)

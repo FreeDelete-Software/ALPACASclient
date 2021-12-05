@@ -93,6 +93,7 @@ func _on_alpacas_received(inputfunc, args, _kwargs):
 	# Send messages elsewhere via signlas.
 	if inputfunc == "text":
 		emit_signal("text_msg",args[0])
+		Utils._log(_log_dest, args[0])
 	elif inputfunc == "logged_in":
 		emit_signal("logged_in", true)
 	elif inputfunc == "render":

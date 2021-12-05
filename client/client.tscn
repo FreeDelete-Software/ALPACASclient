@@ -1,17 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://client/client_ui.gd" type="Script" id=1]
+[ext_resource path="res://font/cmu-typewriter/Typewriter/cmuntt.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://client/evennia.gd" type="Script" id=3]
 [ext_resource path="res://client/alpacas.gd" type="Script" id=4]
 
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
 [node name="Client" type="Control"]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -300.0
-margin_top = -56.0
-margin_right = 300.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -29,18 +28,19 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer"]
-visible = false
-margin_right = 600.0
-margin_bottom = 262.0
+margin_right = 1024.0
+margin_bottom = 520.0
 focus_mode = 2
 size_flags_vertical = 3
-custom_colors/default_color = Color( 0, 0, 0, 1 )
+custom_fonts/normal_font = SubResource( 1 )
+custom_colors/default_color = Color( 0.780392, 0.780392, 0.780392, 1 )
 scroll_following = true
 selection_enabled = true
 
 [node name="Connect" type="HBoxContainer" parent="Panel/VBoxContainer"]
-margin_right = 600.0
-margin_bottom = 24.0
+margin_top = 524.0
+margin_right = 1024.0
+margin_bottom = 548.0
 
 [node name="Mode" type="OptionButton" parent="Panel/VBoxContainer/Connect"]
 margin_right = 29.0
@@ -48,22 +48,22 @@ margin_bottom = 24.0
 
 [node name="Host" type="LineEdit" parent="Panel/VBoxContainer/Connect"]
 margin_left = 33.0
-margin_right = 196.0
+margin_right = 338.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 placeholder_text = "Enter hostname or IP (eg. www.server.tld, 192.168.1.2)"
 
 [node name="UserName" type="LineEdit" parent="Panel/VBoxContainer/Connect"]
-margin_left = 200.0
-margin_right = 364.0
+margin_left = 342.0
+margin_right = 647.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 expand_to_text_length = true
 placeholder_text = "User"
 
 [node name="Password" type="LineEdit" parent="Panel/VBoxContainer/Connect"]
-margin_left = 368.0
-margin_right = 532.0
+margin_left = 651.0
+margin_right = 956.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 secret = true
@@ -71,26 +71,26 @@ secret_character = "@"
 placeholder_text = "Password"
 
 [node name="Connect" type="Button" parent="Panel/VBoxContainer/Connect"]
-margin_left = 536.0
-margin_right = 600.0
+margin_left = 960.0
+margin_right = 1024.0
 margin_bottom = 24.0
 toggle_mode = true
 text = "Connect"
 
 [node name="Send" type="HBoxContainer" parent="Panel/VBoxContainer"]
-margin_top = 28.0
-margin_right = 600.0
-margin_bottom = 52.0
+margin_top = 552.0
+margin_right = 1024.0
+margin_bottom = 576.0
 
 [node name="LineEdit" type="LineEdit" parent="Panel/VBoxContainer/Send"]
-margin_right = 553.0
+margin_right = 977.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 placeholder_text = "Enter some text to send..."
 
 [node name="Send" type="Button" parent="Panel/VBoxContainer/Send"]
-margin_left = 557.0
-margin_right = 600.0
+margin_left = 981.0
+margin_right = 1024.0
 margin_bottom = 24.0
 text = "Send"
 
