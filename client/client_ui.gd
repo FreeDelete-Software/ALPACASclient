@@ -77,6 +77,7 @@ func _on_LineEdit_text_entered(_command):
 	if _command== "":
 		# Send newline in text_msg signal, but send nothing over network
 		emit_signal("text_msg", "\n")
+		Utils._log(_log_dest, "\n")
 		return
 	
 	# Show command that was sent
