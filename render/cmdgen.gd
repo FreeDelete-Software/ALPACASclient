@@ -9,3 +9,8 @@ signal send_generated_command(cmd_string)
 
 func _send_generated_command(cmd_complete):
 	emit_signal("send_generated_command", cmd_complete)
+
+
+func _cmd_get(obj_key):
+	var command = "get %s" % obj_key
+	_send_generated_command(command)

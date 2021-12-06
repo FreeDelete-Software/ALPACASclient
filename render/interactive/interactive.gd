@@ -16,6 +16,7 @@ var default_texture = "default/error.png"
 var display_name = "default"
 var key_name = "default"
 var sprite_file = "default"
+var obj_id
 
 
 func _ready():

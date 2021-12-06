@@ -56,27 +56,46 @@ func render_interactive(obj_dict):
 	var this_obj = _interactive.instance()
 	this_obj.display_name = obj_dict["display_name"]
 	this_obj.key_name = obj_dict["key_name"]
+	this_obj.obj_id = obj_dict["obj_id"]
 	if obj_dict["obj_type"] == "exit":
 		this_obj.default_texture = "default/door200.png"
 		this_obj.connect("left_clicked", self, "_on_exit_clicked")
 		Utils._anchor_node_center_bottom(this_obj)
 		_exits_container.add_child(this_obj)
+	elif obj_dict["obj_type"] == "thing":
+		this_obj.default_texture = "default/generic_object64.png"
+		this_obj.connect("left_clicked", self, "_on_thing_clicked")
+		_objects_container.add_child(this_obj)
+	print("render.gd -- Rendered object with id: %s" % this_obj.obj_id)
 
 
 func unrender_all_scenery():
 	for node in _exits_container.get_children():
-		unrender(node)
+		unrender_node(node)
 	for node in _objects_container.get_children():
-		unrender(node)
+		unrender_node(node)
 
 
-func unrender(node):
+func unrender_obj(obj_id):
+	var all_instances = _objects_container.get_children()
+	all_instances +=_exits_container.get_children()
+	for node in all_instances:
+		if obj_id == node.obj_id:
+			print("render.gd -- unrendered node with id: %s" % node.obj_id)
+			unrender_node(node)
+
+
+func unrender_node(node):
 	node.queue_free()
 
 
 func _on_exit_clicked(exit_key):
 	# No processing needed for exits. Its key is the command (assuming no dupes)
 	_cmdgen._send_generated_command(exit_key)
+
+
+func _on_thing_clicked(thing_key):
+	_cmdgen._cmd_get(thing_key)
 
 
 func _on_Client_logged_in(is_logged_in):
@@ -92,9 +111,11 @@ func _on_Client_render(args, kwargs):
 	for arg in args:
 		if arg == "new_room":
 			render_new_room(kwargs)
-		if arg == "add_objects":
+		elif arg == "add_objects":
 			for obj_dict in kwargs["obj_list"]:
 				render_interactive(obj_dict)
+		elif arg == "unrender":
+			unrender_obj(kwargs["obj_id"]) 
 
 
 func _on_Client_text_msg(string_msg):
