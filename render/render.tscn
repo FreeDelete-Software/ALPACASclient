@@ -104,31 +104,49 @@ margin_top = 0.0
 margin_right = 1024.0
 margin_bottom = 256.0
 
-[node name="Objects" type="MarginContainer" parent="Scenery"]
+[node name="Bottom" type="HBoxContainer" parent="Scenery"]
 margin_top = 268.0
 margin_right = 1024.0
 margin_bottom = 576.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 128
+
+[node name="PlayerAlign" type="VBoxContainer" parent="Scenery/Bottom"]
+margin_bottom = 308.0
+
+[node name="SPACER" type="Control" parent="Scenery/Bottom/PlayerAlign"]
+margin_bottom = 304.0
+size_flags_vertical = 3
+
+[node name="Player" parent="Scenery/Bottom/PlayerAlign" instance=ExtResource( 4 )]
+anchor_top = 0.0
+anchor_bottom = 0.0
+margin_top = 308.0
+margin_right = 0.0
+margin_bottom = 308.0
+
+[node name="Objects" type="GridContainer" parent="Scenery/Bottom"]
+margin_left = 128.0
+margin_right = 1024.0
+margin_bottom = 308.0
+size_flags_horizontal = 3
+custom_constants/vseparation = 75
+custom_constants/hseparation = 75
+columns = 4
 __meta__ = {
 "_editor_description_": "Any children added here (in the Godot editor) will be deleted during the rendering process."
 }
 
-[node name="InteractiveNode" parent="Scenery/Objects" instance=ExtResource( 6 )]
+[node name="InteractiveNode" parent="Scenery/Bottom/Objects" instance=ExtResource( 6 )]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
 margin_top = 0.0
-margin_right = 1024.0
-margin_bottom = 308.0
-
-[node name="Player" parent="." instance=ExtResource( 4 )]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = -21.527
-margin_top = -255.632
-margin_right = -21.527
-margin_bottom = -255.632
+margin_right = 224.0
+margin_bottom = 0.0
 
 [node name="CmdGen" type="Node" parent="."]
 script = ExtResource( 7 )

@@ -6,8 +6,9 @@ var default_bg = "default/empty_room1024x576.png"
 
 onready var text_out = $Messages/Text
 onready var _exits_container = $Scenery/Exits
-onready var _objects_container = $Scenery/Objects
+onready var _objects_container = $Scenery/Bottom/Objects
 onready var _cmdgen = $CmdGen
+onready var _player_node = $Scenery/Bottom/PlayerAlign/Player
 
 var _interactive = load("res://render/interactive/interactive.tscn")
 
@@ -20,7 +21,7 @@ func logged_out_state():
 	unrender_all_scenery()
 	set_scene_background("default/white_1024x576.png")
 	set_room_name("Not logged in!")
-	$Player.visible = false
+	_player_node.visible = false
 
 
 func set_scene_background(art_path):
@@ -101,7 +102,7 @@ func _on_thing_clicked(thing_key):
 func _on_Client_logged_in(is_logged_in):
 	if is_logged_in:
 		set_room_name("Logged in!")
-		$Player.visible = true
+		_player_node.visible = true
 	else:
 		logged_out_state()
 
