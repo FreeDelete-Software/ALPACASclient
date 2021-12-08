@@ -6,8 +6,8 @@ extends Control
 # get created as instances inside render.gd.
 #
 
-signal left_clicked(key_str)
-signal right_clicked(key_str)
+signal left_clicked(key_str, instance_id)
+signal right_clicked(key_str, instance_id)
 
 # Variable(s) intended to be set in an extended script
 var default_texture = "default/error.png"
@@ -18,9 +18,8 @@ var key_name = "default"
 var sprite_file = "default"
 var obj_id
 
-
 func _ready():
-	print("interactive.gd -- Scenery object added with key_name: %s" % key_name)
+	print("interactive.gd -- Scenery object added with key_name: %s and instance id: %s" % [key_name, self.get_instance_id()])
 	$Texture/Label.text = display_name
 	update_texture(sprite_file)
 
@@ -40,12 +39,13 @@ func update_texture(art_path):
 
 
 func _on_gui_input(event):
+	var _instance_id = self.get_instance_id()
 	if (event is InputEventMouseButton) and (event.pressed == true):
 		# Get only the events we are looking for and emit results.
 #		print(str(event.button_index))
 		if event.button_index == 1:
 			print("interactive.gd -- Left-click registered on object.")
-			emit_signal("left_clicked", key_name)
+			emit_signal("left_clicked", key_name, _instance_id)
 		elif event.button_index == 2:
 			print("interactive.gd -- Right-click registered on object.")
-			emit_signal("right_clicked", key_name)
+			emit_signal("right_clicked", key_name, _instance_id)

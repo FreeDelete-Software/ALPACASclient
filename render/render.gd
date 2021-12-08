@@ -24,6 +24,13 @@ func logged_out_state():
 	_player_node.visible = false
 
 
+func get_all_interactives():
+	# Get a current list of all rendered instances
+	var all_instances = _objects_container.get_children()
+	all_instances +=_exits_container.get_children()
+	return all_instances
+
+
 func set_scene_background(art_path):
 	if (Utils._art_exists(art_path)) == true:
 		$Background.texture = load("res://art/%s" % art_path)
@@ -90,13 +97,25 @@ func unrender_node(node):
 	node.queue_free()
 
 
-func _on_exit_clicked(exit_key):
+func _on_exit_clicked(exit_key, _instance_id):
 	# No processing needed for exits. Its key is the command (assuming no dupes)
 	_cmdgen._send_generated_command(exit_key)
 
 
-func _on_thing_clicked(thing_key):
-	_cmdgen._cmd_get(thing_key)
+func _on_thing_clicked(thing_key, _instance_id):
+	# Run a "get" command on things, accounting for dupes in current location
+	var key_count = 0
+	var this_index
+	var _key_name = thing_key
+	for node in get_all_interactives():
+		if node.key_name == thing_key:
+			key_count+=1
+			if node.get_instance_id() == _instance_id:
+				this_index = key_count
+	if key_count > 1:
+		_key_name += "-%s" % this_index
+		
+	_cmdgen._cmd_get(_key_name)
 
 
 func _on_Client_logged_in(is_logged_in):
