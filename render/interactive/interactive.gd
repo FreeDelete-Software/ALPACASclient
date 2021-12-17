@@ -16,22 +16,25 @@ var default_texture = "default/error.png"
 var display_name = "default"
 var key_name = "default"
 var sprite_file = "default"
+var texture_scale = 1.0
 var obj_id
 
 func _ready():
 	print("interactive.gd -- Scenery object added with key_name: %s and instance id: %s" % [key_name, self.get_instance_id()])
 	$Texture/Label.text = display_name
-	update_texture(sprite_file)
+	update_texture(sprite_file, texture_scale)
 
 
-func update_texture(art_path):
+func update_texture(art_path, _texture_scale=1.0):
 	var full_path = "res://art/"
 	if (Utils._art_exists(art_path)) == true:
 		full_path += art_path
 	else:
 		full_path += default_texture
 	$Texture.texture = load(full_path)
-	var texture_size = $Texture.texture.get_size()
+	$Texture.rect_scale.x = _texture_scale
+	$Texture.rect_scale.y = _texture_scale
+	var texture_size = $Texture.get_size()
 	$Texture.margin_left = -texture_size.x / 2
 	$Texture.margin_right = -texture_size.x /2
 	$Texture.margin_top = -texture_size.y / 2

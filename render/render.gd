@@ -7,6 +7,7 @@ var default_bg = "default/empty_room1024x576.png"
 onready var text_out = $Messages/Text
 onready var _exits_container = $Scenery/Exits
 onready var _objects_container = $Scenery/Bottom/Objects
+onready var _chars_container = $Scenery/Bottom/Characters
 onready var _cmdgen = $CmdGen
 onready var _player_node = $Scenery/Bottom/PlayerAlign/Player
 
@@ -74,7 +75,13 @@ func render_interactive(obj_dict):
 		this_obj.default_texture = "default/generic_object64.png"
 		this_obj.connect("left_clicked", self, "_on_thing_clicked")
 		_objects_container.add_child(this_obj)
-	print("render.gd -- Rendered object with id: %s" % this_obj.obj_id)
+	elif obj_dict["obj_type"] == "user":
+		this_obj.default_texture = "default/player256.png"
+		this_obj.texture_scale = 0.5
+		this_obj.connect("left_clicked", self, "_on_other_char_clicked")
+		_chars_container.add_child(this_obj)
+	else:
+		print("render.gd -- Server object not rendered: %s" % obj_dict)
 
 
 func unrender_all_scenery():
@@ -82,11 +89,14 @@ func unrender_all_scenery():
 		unrender_node(node)
 	for node in _objects_container.get_children():
 		unrender_node(node)
+	for node in _chars_container.get_children():
+		unrender_node(node)
 
 
 func unrender_obj(obj_id):
 	var all_instances = _objects_container.get_children()
-	all_instances +=_exits_container.get_children()
+	all_instances += _exits_container.get_children()
+	all_instances += _chars_container.get_children()
 	for node in all_instances:
 		if obj_id == node.obj_id:
 			print("render.gd -- unrendered node with id: %s" % node.obj_id)
@@ -116,6 +126,10 @@ func _on_thing_clicked(thing_key, _instance_id):
 		_key_name += "-%s" % this_index
 		
 	_cmdgen._cmd_get(_key_name)
+
+
+func _on_other_char_clicked(_thing_key, _instance_id):
+	pass
 
 
 func _on_Client_logged_in(is_logged_in):
